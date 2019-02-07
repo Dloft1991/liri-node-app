@@ -27,6 +27,10 @@ axios.get(queryUrl).then(
       console.log("Rating: " + response.data.Rated);
       console.log("Rating: " + response.data.imdbRating);
       console.log("Rotten Tomatoes: " + response.data.Ratings[1].Value);
+      console.log("Rating: " + response.data.Country);
+      console.log("Rating: " + response.data.Language);
+      console.log("Rating: " + response.data.Plot);
+      console.log("Rating: " + response.data.Actors);
     }
   );
 //   * Title of the movie.
