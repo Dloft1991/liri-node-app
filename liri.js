@@ -2,89 +2,63 @@
 
 require("dotenv").config();
 
-// var spotify = requre("spotify");
-// var request = require ("request");
-// var fs = requre("fs");
+
+  //9. Make it so liri.js can take in one of the following commands:
+
+//    * `concert-this`
+
+//    * `spotify-this-song`
+
+var Spotify = require('node-spotify-api');
+
+var search = process.argv[2];
+
+ 
+const spotifyThisSong = function(spotty) {
+
+  //if not undefined
+  if(spotty === undefined) {
+    spotty = "love lies";
+  }
+
+  var item = process.argv.slice(3).join(" ");
+  
+  var spotify = new Spotify({
+    id: process.env.SPOTIFY_ID,
+    secret: process.env.SPOTIFY_SECRET
+  });
+   
+  spotify.search({ type: 'track', query: item }, function(err, data) {
+    if (err) {
+      return console.log('Error occurred: ' + err);
+    }
+   //console.log(data);
+   console.log("--------------------------");
+    console.log("Song:         " + data.tracks.items[0].name);
+    console.log("Preview Link: " + data.tracks.items[0].preview_url);
+    console.log("Album:        " + data.tracks.items[0].album.name);
+    console.log("--------------------------");
+  
+  });
+}
+ 
 
 
-
-//   //9. Make it so liri.js can take in one of the following commands:
-
-// //    * `concert-this`
-
-// //    * `spotify-this-song`
-// var spotify = new Spotify(keys.spotify);
-// var movieName = process.argv[2];
-
-
-// actionsSpeak(action, argument);
-
-// function actionsSpeak (action, argument) {
-//     argument = userInput();
-
-//     switch (action) {
-//         case "spotify-this-song":
-
-//         var songTitle = argument;
-
-//         if (songTitle === "") {
-//             lookupSpecificSong();
-//         }else {
-//             SongInfo(songTitle);
-//         }
-//         break;
-        
-//     }
-// }
-
-// function SongInfo(songTitle) {
-//     spofity.search({type: "track", query: songTitle}, function(err, data) {
-//         if (err) {
-//             console.log(err);
-//             return
-//         }
-//         var artistArray = data.tracks.items[0].album.artists;
-//         var artistName = [];
-
-//         for (var i = 0; i < artistArray.length; i++) {
-//             artistName.push(artistArray[i].name);
-//         }
-
-//         var artist = artistName.join(", ");
-
-//         console.log("Artist: " + artist);
-//         console.log("Song: " + data.tracksitems[0].name);
-//         console.log("Spotify Preview URL: " + artdata.tracks.items[0].preview_url);
-//         console.log("Album Name: " + data.tracks.items[0].album.name);
-//     });
-// }
-
-// function lookupSpecificSong() {
-
-	
-// 	spotify.lookup({type: 'track', id: '3c3407938f7248e4bdece5862d743366'}, function(err, data) {
-// 		if (err) {
-// 			logOutput.error(err);
-// 			return
-// 		}
-
-	
-// 		console.log("Artist: " + data.artists[0].name);
-// 		console.log("Song: " + data.name);
-// 		console.log("Spotify Preview URL: " + data.preview_url);
-// 		console.log("Album Name: " + data.album.name);
-// 	});
-// }
-
-//    * `movie-this`
+//    * `movie-this` ---------------------------------------
 
 var axios = require("axios");
 
-var movieName = process.argv[2];
+const movieThis = function(movieName){
+  if (movieName === undefined) {
+    movieName = "iron man";
+  }
+
+var movieName = process.argv[3];
 
 var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
 axios.get(queryUrl).then(
     function(response) {
+      console.log("--------------------------");
         console.log("Title: " + response.data.Title);
       console.log("Release Year: " + response.data.Year);
       console.log("Rating: " + response.data.Rated);
@@ -94,8 +68,10 @@ axios.get(queryUrl).then(
       console.log("Language: " + response.data.Language);
       console.log("Plot: " + response.data.Plot);
       console.log("Actors: " + response.data.Actors);
+      console.log("--------------------------");
     }
   );
+  }
 //   * Title of the movie.
 //   * Year the movie came out.
 //   * IMDB Rating of the movie.
@@ -107,3 +83,14 @@ axios.get(queryUrl).then(
   
 //    * `do-what-it-says`
 
+// commands----------------
+
+if (search === "spotify-this-song") {
+  spotifyThisSong();
+}
+else if (search === "movie-this") {
+  movieThis();
+}
+else {
+  console.log("Command not recognized! Please try again.")
+}
