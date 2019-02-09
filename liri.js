@@ -32,8 +32,9 @@ const spotifyThisSong = function(spotty) {
     if (err) {
       return console.log('Error occurred: ' + err);
     }
-   //console.log(data);
+  //  console.log(data);
    console.log("--------------------------");
+  //  console.log("Artist: " + data.tracks.items[0].artist.name);
     console.log("Song:         " + data.tracks.items[0].name);
     console.log("Preview Link: " + data.tracks.items[0].preview_url);
     console.log("Album:        " + data.tracks.items[0].album.name);
